@@ -31,6 +31,13 @@ func Run(db db.DB, line string) (string, error) {
 		return runIfValid(cmd, 1, func() { db.Unset(cmd.Args[0]) })
 	case command.NumEqualTo:
 		return runIfValidWithOutput(cmd, 1, func() string { return strconv.Itoa(db.NumEqualTo(cmd.Args[0])) })
+
+	case command.Begin:
+		return runIfValid(cmd, 0, func() { db.Begin() })
+	case command.Commit:
+		return runIfValidWithError(cmd, 0, func() error { return db.Commit() })
+	case command.Rollback:
+		return runIfValidWithError(cmd, 0, func() error { return db.Rollback() })
 	}
 
 	return "", nil
@@ -41,6 +48,14 @@ func runIfValid(cmd *command.Command, numOfArgs int, action func()) (string, err
 		action()
 		return ""
 	})
+}
+
+func runIfValidWithError(cmd *command.Command, numOfArgs int, action func() error) (string, error) {
+	if len(cmd.Args) != numOfArgs {
+		return "", ArgumentError{cmd.Action, numOfArgs}
+	}
+
+	return "", action()
 }
 
 func runIfValidWithOutput(cmd *command.Command, numOfArgs int, action func() string) (string, error) {

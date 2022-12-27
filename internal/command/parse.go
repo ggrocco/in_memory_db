@@ -15,6 +15,10 @@ const (
 	Get        ActionName = "GET"
 	Unset      ActionName = "UNSET"
 	NumEqualTo ActionName = "NUMEQUALTO"
+
+	Begin    ActionName = "BEGIN"
+	Commit   ActionName = "COMMIT"
+	Rollback ActionName = "ROLLBACK"
 )
 
 type Command struct {
@@ -49,6 +53,12 @@ func mapToActionName(action string) ActionName {
 		return Unset
 	case "NUMEQUALTO":
 		return NumEqualTo
+	case "BEGIN":
+		return Begin
+	case "COMMIT":
+		return Commit
+	case "ROLLBACK":
+		return Rollback
 	}
 
 	return Invalid

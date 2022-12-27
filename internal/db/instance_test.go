@@ -42,4 +42,47 @@ func TestInstance(t *testing.T) {
 	if numEqualTo != 2 {
 		t.Error("Fail on NumEqualTo after unset")
 	}
+
+	err := instance.Rollback()
+	if err != ErrorNoTransaction {
+		t.Error("Fail on call Rollback without transaction open")
+	}
+
+	err = instance.Commit()
+	if err != ErrorNoTransaction {
+		t.Error("Fail on call Commit without transaction open")
+	}
+
+	instance.Begin()
+	instance.Set("test2", "222")
+	test2 := instance.Get("test2")
+	if test2 != "222" {
+		t.Error("Fail on get test value at first begin")
+	}
+
+	instance.Begin()
+	instance.Set("test2", "333")
+	test2 = instance.Get("test2")
+	if test2 != "333" {
+		t.Error("Fail on get test value at second begin")
+	}
+	instance.Rollback()
+
+	numEqualTo = instance.NumEqualTo("222")
+	if numEqualTo != 1 {
+		t.Error("Fail on NumEqualTo inside transaction")
+	}
+
+	instance.Unset("test3")
+
+	instance.Commit()
+	test2 = instance.Get("test2")
+	if test2 != "222" {
+		t.Error("Fail on get test value at first begin")
+	}
+
+	numEqualTo = instance.NumEqualTo("123")
+	if numEqualTo != 0 {
+		t.Error("Fail on NumEqualTo after unset")
+	}
 }

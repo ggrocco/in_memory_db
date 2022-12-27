@@ -30,6 +30,11 @@ func TestExample1(t *testing.T) {
 		{"SET test-var-name-2 10", "", nil},
 		{"NUMEQUALTO 50", "1", nil},
 		{"INVALID_COMMAND 50", "", command.ErrorInvalidCommand},
+		{"BEGIN", "", nil},
+		{"BEGIN 1", "", ArgumentError{command.Begin, 0}},
+		{"COMMIT 1", "", ArgumentError{command.Commit, 0}},
+		{"ROLLBACK", "", nil},
+		{"COMMIT", "", db.ErrorNoTransaction},
 	}
 
 	db := db.New()

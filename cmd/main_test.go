@@ -39,6 +39,37 @@ func Test(t *testing.T) {
 				{"END", ""},
 			},
 		},
+		{
+			description: "basic transaction",
+			interactions: []interaction{
+				{"GET test-var-name", "Nil"},
+				{"BEGIN", ""},
+				{"SET test-var-name 100", ""},
+				{"GET test-var-name", "100"},
+				{"COMMIT", ""},
+				{"GET test-var-name", "100"},
+				{"END", ""},
+			},
+		},
+		{
+			description: "nested Transaction",
+			interactions: []interaction{
+				{"GET test-var-name", "Nil"},
+				{"BEGIN", ""},
+				{"SET test-var-name 100", ""},
+				{"GET test-var-name", "100"},
+				{"BEGIN", ""},
+				{"SET test-var-name 120", ""},
+				{"GET test-var-name", "120"},
+				{"BEGIN", ""},
+				{"SET test-var-name 150", ""},
+				{"GET test-var-name", "150"},
+				{"ROLLBACK", ""},
+				{"COMMIT", ""},
+				{"GET test-var-name", "100"}, // Change from 120 to 100 based on the requirement.
+				{"END", ""},
+			},
+		},
 	}
 
 	for _, tc := range testCases {

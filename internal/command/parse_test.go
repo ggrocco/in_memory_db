@@ -18,6 +18,9 @@ func TestParse(t *testing.T) {
 		{"NUMEQUALTO 50", NumEqualTo, []string{"50"}, nil},
 		{"", "", nil, ErrorInvalidCommand},
 		{"BUUM", "", nil, ErrorInvalidCommand},
+		{"BEGIN", Begin, []string{}, nil},
+		{"COMMIT", Commit, []string{}, nil},
+		{"ROLLBACK", Rollback, []string{}, nil},
 	}
 
 	for _, tc := range testCases {
