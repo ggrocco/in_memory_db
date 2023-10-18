@@ -3,11 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"in_memory_db/internal/db"
-	"in_memory_db/internal/interpreter"
 	"io"
 	"os"
 	"strings"
+
+	"in_memory_db/internal/db"
+	"in_memory_db/internal/interpreter"
 )
 
 func main() {

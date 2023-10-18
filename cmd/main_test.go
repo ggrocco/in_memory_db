@@ -2,9 +2,10 @@ package main
 
 import (
 	"bytes"
-	"in_memory_db/internal/db"
 	"strings"
 	"testing"
+
+	"in_memory_db/internal/db"
 )
 
 func Test(t *testing.T) {

@@ -10,7 +10,6 @@ var ErrorInvalidCommand = errors.New("invalid command")
 type ActionName string
 
 const (
-	Invalid    ActionName = "INVALID"
 	Set        ActionName = "SET"
 	Get        ActionName = "GET"
 	Unset      ActionName = "UNSET"
@@ -20,6 +19,16 @@ const (
 	Commit   ActionName = "COMMIT"
 	Rollback ActionName = "ROLLBACK"
 )
+
+var mapActions = map[string]ActionName{
+	"SET":        Set,
+	"GET":        Get,
+	"UNSET":      Unset,
+	"NUMEQUALTO": NumEqualTo,
+	"BEGIN":      Begin,
+	"COMMIT":     Commit,
+	"ROLLBACK":   Rollback,
+}
 
 type Command struct {
 	Action ActionName
@@ -32,34 +41,15 @@ func Parse(line string) (*Command, error) {
 	}
 
 	parts := strings.Split(line, " ")
-	actionName := mapToActionName(strings.ToUpper(parts[0]))
-	if actionName == Invalid {
+	actionName := strings.ToUpper(parts[0])
+
+	action, ok := mapActions[actionName]
+	if !ok {
 		return nil, ErrorInvalidCommand
 	}
 
 	return &Command{
-		Action: actionName,
+		Action: action,
 		Args:   parts[1:],
 	}, nil
-}
-
-func mapToActionName(action string) ActionName {
-	switch action {
-	case "SET":
-		return Set
-	case "GET":
-		return Get
-	case "UNSET":
-		return Unset
-	case "NUMEQUALTO":
-		return NumEqualTo
-	case "BEGIN":
-		return Begin
-	case "COMMIT":
-		return Commit
-	case "ROLLBACK":
-		return Rollback
-	}
-
-	return Invalid
 }

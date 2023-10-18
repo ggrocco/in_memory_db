@@ -2,9 +2,10 @@ package interpreter
 
 import (
 	"errors"
+	"testing"
+
 	"in_memory_db/internal/command"
 	"in_memory_db/internal/db"
-	"testing"
 )
 
 func TestArgumentError(t *testing.T) {

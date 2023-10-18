@@ -2,9 +2,10 @@ package interpreter
 
 import (
 	"fmt"
+	"strconv"
+
 	"in_memory_db/internal/command"
 	"in_memory_db/internal/db"
-	"strconv"
 )
 
 type ArgumentError struct {
